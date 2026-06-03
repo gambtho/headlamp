@@ -1517,12 +1517,14 @@ function startElectron() {
     mainWindow = new BrowserWindow({
       width,
       height,
+      autoHideMenuBar: true,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
         preload: `${__dirname}/preload.js`,
       },
     });
+    mainWindow.setMenuBarVisibility(false);
 
     // Load the frontend
     mainWindow.loadURL(startUrl);

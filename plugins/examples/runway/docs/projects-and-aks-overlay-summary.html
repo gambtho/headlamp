@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Runway — Executive summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Spectral:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:        #f3ece1;
+    --paper-deep:   #ebe2d3;
+    --paper-edge:   #ddd1bd;
+    --ink:          #1a1814;
+    --ink-soft:     #4a443b;
+    --ink-faint:    #8a8174;
+    --rule:         #c8bda8;
+    --accent:       #b94a2c;
+    --accent-deep:  #862e16;
+    --accent-soft:  #f0d7c9;
+    --gold:         #a07a2c;
+    --green:        #4a6b3a;
+    --code-bg:      #e8dfce;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 16.5px/1.55 "Spectral", Georgia, serif;
+    font-feature-settings: "kern", "liga", "onum";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+    background-image:
+      radial-gradient(rgba(40,30,20,0.06) 1px, transparent 1px),
+      radial-gradient(rgba(40,30,20,0.04) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 1px;
+    mix-blend-mode: multiply;
+    opacity: 0.7;
+  }
+
+  .page {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3.5rem 3rem 4rem;
+  }
+
+  /* Masthead */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .kicker {
+    font: 500 11px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 1.25rem;
+    display: flex; align-items: center; gap: 0.7em;
+  }
+  .kicker .dot {
+    display: inline-block; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--accent);
+  }
+  h1 {
+    font: 600 2.85rem/1.05 "Fraunces", Georgia, serif;
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 96, "SOFT" 40;
+  }
+  h1 em {
+    font-style: italic; color: var(--accent-deep);
+    font-variation-settings: "opsz" 96, "SOFT" 60;
+  }
+  .deck {
+    font: 400 1.05rem/1.4 "Spectral", serif;
+    color: var(--ink-soft);
+    margin: 0;
+    font-style: italic;
+  }
+  .byline {
+    margin-top: 1rem;
+    font: 500 11px/1.4 "JetBrains Mono", monospace;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .byline strong { color: var(--ink-soft); margin-right: 0.4rem; font-weight: 500; }
+
+  /* The pitch — a card per section */
+  section.pitch {
+    margin-bottom: 1.75rem;
+    padding-top: 0.25rem;
+  }
+  section.pitch h2 {
+    font: 500 11px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 0.6rem;
+    display: flex; align-items: baseline; gap: 0.7em;
+  }
+  section.pitch h2::before {
+    content: ""; flex: 0 0 1.3rem; height: 1px; background: var(--accent);
+  }
+  section.pitch h3 {
+    font: 600 1.55rem/1.15 "Fraunces", Georgia, serif;
+    margin: 0 0 0.7rem;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  section.pitch p { margin: 0 0 0.6rem; }
+  section.pitch p:last-child { margin-bottom: 0; }
+  section.pitch em.lede {
+    font-style: italic; color: var(--accent-deep);
+  }
+  section.pitch strong { font-weight: 600; color: var(--ink); }
+
+  /* "By the numbers" panel — pull-quote style */
+  .numbers {
+    background: var(--paper-deep);
+    border-left: 3px solid var(--accent);
+    padding: 1.4rem 1.6rem;
+    margin: 1.75rem 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+  }
+  .numbers .stat .v {
+    font: 500 1.85rem/1 "Fraunces", Georgia, serif;
+    color: var(--accent-deep);
+    display: block;
+    font-variation-settings: "opsz" 96;
+  }
+  .numbers .stat .v small {
+    font-size: 0.7em; color: var(--ink-soft); font-weight: 400; margin-left: 0.2em;
+  }
+  .numbers .stat .l {
+    font: 500 10px/1.3 "JetBrains Mono", monospace;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft); margin-top: 0.4rem; display: block;
+  }
+
+  /* Two-column for "what we ship" / "what we don't" */
+  .duo {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 0.5rem 0 1.25rem;
+  }
+  .duo .col { }
+  .duo h4 {
+    font: 500 10px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin: 0 0 0.6rem; color: var(--ink-faint);
+  }
+  .duo h4.good { color: var(--green); }
+  .duo h4.bad { color: var(--accent-deep); }
+  .duo ul {
+    margin: 0; padding: 0; list-style: none;
+    font: 400 0.94rem/1.45 "Spectral", serif;
+  }
+  .duo li {
+    padding: 0.32rem 0 0.32rem 1.1rem;
+    position: relative;
+    border-bottom: 1px solid var(--paper-edge);
+  }
+  .duo li:last-child { border-bottom: none; }
+  .duo li::before {
+    content: ""; position: absolute; left: 0; top: 0.85rem;
+    width: 0.5rem; height: 1px; background: var(--ink-faint);
+  }
+  .duo .good li::before { background: var(--green); }
+  .duo .bad li::before { background: var(--accent); }
+
+  /* Roadmap strip */
+  .roadmap {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin: 1rem 0 0.5rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .roadmap .phase {
+    padding: 0.9rem 0.9rem 1rem;
+    border-right: 1px solid var(--rule);
+  }
+  .roadmap .phase:last-child { border-right: none; }
+  .roadmap .phase .when {
+    font: 600 11px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 0.45rem;
+  }
+  .roadmap .phase .what {
+    font: 500 0.85rem/1.3 "Spectral", serif;
+    color: var(--ink);
+    margin: 0 0 0.35rem;
+  }
+  .roadmap .phase .detail {
+    font: 400 0.8rem/1.35 "Spectral", serif;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .roadmap .phase.now { background: var(--accent-soft); }
+
+  /* Risk row */
+  .risks {
+    background: var(--paper-deep);
+    padding: 1rem 1.3rem;
+    margin: 1rem 0 0;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+    font: 400 0.9rem/1.35 "Spectral", serif;
+    color: var(--ink-soft);
+  }
+  .risks .r strong { color: var(--ink); font-weight: 600; }
+
+  /* "The ask" */
+  .ask {
+    margin-top: 2rem;
+    padding: 1.6rem 1.8rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+  }
+  .ask h2 {
+    font: 500 11px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--accent-soft);
+    margin: 0 0 0.7rem;
+  }
+  .ask p {
+    margin: 0 0 0.5rem;
+    font: 400 1.05rem/1.4 "Spectral", serif;
+  }
+  .ask p:last-child { margin-bottom: 0; }
+  .ask strong { color: #fff; font-weight: 600; }
+  .ask a { color: var(--accent-soft); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  /* Footer */
+  .footnote {
+    margin-top: 1.5rem;
+    font: 400 0.82rem/1.4 "Spectral", serif;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+  .footnote a { color: var(--accent-deep); }
+
+  @media (max-width: 760px) {
+    .page { padding: 2rem 1.25rem 3rem; }
+    h1 { font-size: 2rem; }
+    .duo, .numbers, .roadmap, .risks { grid-template-columns: 1fr; }
+    .roadmap .phase { border-right: none; border-bottom: 1px solid var(--rule); }
+    .roadmap .phase:last-child { border-bottom: none; }
+  }
+
+  @media print {
+    body { background: white; font-size: 11pt; }
+    body::before { display: none; }
+    .page { padding: 0.4in 0.5in; max-width: none; }
+    .ask { color: #1a1814; background: #f0d7c9; border: 1.5pt solid #862e16; }
+    .ask h2 { color: #862e16; }
+    .ask a { color: #862e16; }
+    section.pitch { break-inside: avoid; }
+    .numbers, .roadmap, .risks { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <p class="kicker"><span class="dot"></span>Executive summary <span class="dot"></span> One page</p>
+  <h1>Making Kubernetes<br><em>fluent</em> in AI apps</h1>
+  <p class="deck">A Headlamp plugin that turns scattered Kubernetes resources into a single AI application view, with inference-engine metrics, GPU telemetry, and kernel-level diagnostics.</p>
+  <div class="byline">
+    <span><strong>Date</strong> 2026-06-03</span>
+    <span><strong>Stage</strong> v1.0 scoped, demo built</span>
+    <span><strong>Companion</strong> Topology demo (preceded this page)</span>
+  </div>
+</header>
+
+<section class="pitch">
+  <h2>The problem</h2>
+  <h3>Operators run AI workloads in the dark</h3>
+  <p>An ML application on Kubernetes is never one resource — it’s a model, plus an app pod, plus a vector database, plus storage, plus secrets, plus routing. Today operators see those as <strong>scattered objects with no application identity</strong>. Headlamp shows pods and deployments; it doesn’t know which ones belong to a given AI application, or whether that application is healthy as a whole.</p>
+  <p>The diagnostics gap is worse. The metrics that matter for AI — time-to-first-token, KV-cache pressure, prefix-cache hit rate, GPU utilization, NCCL retransmits — live behind raw Prometheus endpoints, DCGM exporters, and eBPF tools. Each one is a separate surface with its own conventions, and none of them are joined up to the workload they describe.</p>
+</section>
+
+<section class="pitch">
+  <h2>The bet</h2>
+  <h3>Three concepts make Kubernetes AI-fluent</h3>
+  <p><strong>1. A Project is a real object.</strong> A small CRD groups every resource of one ML app. Ready/Degraded/Empty at a glance. Headlamp aggregates per-project throughput, latency, cost, sessions. The pile becomes a thing.</p>
+  <p><strong>2. AI-shaped diagnostics, in one place.</strong> Per-model inference metrics from vLLM / Ray Serve / TEI. GPU telemetry from DCGM when present. Kernel-level diagnostics (DNS to HuggingFace, OOM kills, CUDA allocations, NCCL retransmits) via Inspektor Gadget. Nothing new for ops to install — the plugin <em>uses</em> what’s already standard.</p>
+  <p><strong>3. AKS conveniences, layered on top.</strong> KAITO presets, Workload Identity wiring, ACR pull-secrets, Gateway API HTTPRoute, Azure OpenAI credential helper — the AKS-specific paper-cuts an operator hits when standing up an AI workload on Azure. These ship as a separate layer that loads only on AKS clusters, and they drive everything from Kubernetes labels and Azure Portal deep-links — no Azure Resource Manager SDK in the plugin. When the kaito-project organization is ready to ship this independently, the layering means it’s a config change, not a refactor.</p>
+</section>
+
+<div class="numbers">
+  <div class="stat">
+    <span class="v">1</span>
+    <span class="l">Plugin · one install, one surface</span>
+  </div>
+  <div class="stat">
+    <span class="v">3</span>
+    <span class="l">Engine adapters at launch (vLLM · Ray · TEI)</span>
+  </div>
+  <div class="stat">
+    <span class="v">9</span>
+    <span class="l">Curated eBPF diagnostics, AI-tuned</span>
+  </div>
+  <div class="stat">
+    <span class="v">0</span>
+    <span class="l">Cloud-provider SDK dependencies, ever</span>
+  </div>
+  <div class="stat">
+    <span class="v">68<small>%</small></span>
+    <span class="l">Self-host cost vs. AOAI (illustrative, in demo)</span>
+  </div>
+  <div class="stat">
+    <span class="v">2x</span>
+    <span class="l">Source paths — Prometheus when present, ring buffer fallback</span>
+  </div>
+</div>
+
+<section class="pitch">
+  <h2>Scope</h2>
+  <h3>What v1.0 ships — and what it deliberately doesn’t</h3>
+  <div class="duo">
+    <div class="col">
+      <h4 class="good">v1.0 ships</h4>
+      <ul>
+        <li>Project CRD + controller; Projects list, Resources tab, create wizard</li>
+        <li>Observability tab: per-model TTFT / TPOT / throughput / KV-cache</li>
+        <li>GPU telemetry panel (DCGM via Prometheus, when both detected)</li>
+        <li>Inspektor Gadget integration for kernel-level diagnostics</li>
+        <li>AKS overlay: KAITO preset, Workload Identity, ACR, HTTPRoute, AOAI credentials</li>
+        <li>Engine adapters: vLLM, Ray Serve, HuggingFace TEI</li>
+        <li>Graceful fallback when any optional dep (Prom, DCGM, IG, KAITO) is absent</li>
+        <li><em>Stretch:</em> Topology view (visual proof already built)</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4 class="bad">Out of scope (and that’s the point)</h4>
+      <ul>
+        <li>Replacing the AI Runway deploy wizard</li>
+        <li>Generic Inspektor Gadget browser</li>
+        <li>Alerting, on-call, or thresholds</li>
+        <li>GitOps integration</li>
+        <li>Cross-cluster Project views (v1.1+)</li>
+        <li>Any Azure ARM / AWS / GCP cloud SDK use, at any version</li>
+        <li>Long-term metric or gadget-result persistence</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="pitch">
+  <h2>Roadmap</h2>
+  <h3>One release away from real, with a credible v1.1 story</h3>
+  <div class="roadmap">
+    <div class="phase">
+      <p class="when">v0.9 · prereq</p>
+      <p class="what">Existing UX paper cuts</p>
+      <p class="detail">Per-cluster backend config; deployments-list crash fix. Already-known plugin work that gates the Project layer.</p>
+    </div>
+    <div class="phase now">
+      <p class="when">v1.0 · ship</p>
+      <p class="what">Projects + Observability + AKS overlay</p>
+      <p class="detail">Everything in the “ships” column above. Topology view as stretch.</p>
+    </div>
+    <div class="phase">
+      <p class="when">v1.1</p>
+      <p class="what">Agents as first-class</p>
+      <p class="detail">Agent-runtime detection (langgraph, LlamaIndex), routing-decision metrics, runtime-call edges. Topology if not already shipped.</p>
+    </div>
+    <div class="phase">
+      <p class="when">v2.0</p>
+      <p class="what">Historical & cross-Project</p>
+      <p class="detail">Long-term metrics, gadget-result persistence, cross-Project ops view, vector-DB / training-shaped Projects.</p>
+    </div>
+  </div>
+</section>
+
+<p class="footnote">
+  Demo video: <a href="https://onedrive.cloud.microsoft/:v:/a@h48wn6w3/S/cQr1NfbtRoyeQKOkBO6DXzeMEgUCGKfa-JojRzHgsovKsBswJA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0=&">topology view walkthrough</a>
+</p>
+
+</div>
+</body>
+</html>
